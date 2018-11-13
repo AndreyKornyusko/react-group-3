@@ -14,8 +14,13 @@ const tech = [
 
 const App = () => (
   <div>
-    <TechList items={tech} />
-    <ProductList products={products} />
+    <Panel title="Latest tech">
+      <TechList items={tech} />
+    </Panel>
+
+    <Panel title="Top seeling products">
+      <ProductList products={products} />
+    </Panel>
   </div>
 );
 
