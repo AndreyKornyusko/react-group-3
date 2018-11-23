@@ -1,51 +1,65 @@
 import React, { Component } from 'react';
-import v4 from 'uuid/v4';
-// import SignupForm from './SignupForm';
-import NoteList from './NoteList';
-import NoteEditor from './NoteEditor';
-import NoteFilter from './NoteFilter';
+import ArticleList from './ArticleList';
+import CategorySelector from './CategorySelector';
+import ErrorNotification from './ErrorNotification';
+import Spinner from './Spinner';
+import { getArticlesByQuery } from '../services/api';
 
-const filterNotes = (filter, notes) => {
-  return notes.filter(note =>
-    note.text.toLowerCase().includes(filter.toLowerCase())
-  );
+const styles = {
+  header: { textAlign: 'center' }
 };
+
+const categorySelectorOptions = ['html', 'css', 'javascript', 'react'];
 
 export default class App extends Component {
   state = {
-    notes: [],
-    filter: ''
+    articles: [],
+    isLoading: false,
+    error: null,
+    category: categorySelectorOptions[0]
   };
 
-  handleAddNote = text => {
-    this.setState(prevState => ({
-      notes: [{ id: v4(), text }, ...prevState.notes]
-    }));
+  componentDidMount() {
+    this.fetchArticles(this.state.category);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const prevCategory = prevState.category;
+    const nextCategory = this.state.category;
+
+    if (prevCategory !== nextCategory) {
+      this.fetchArticles(nextCategory);
+    }
+  }
+
+  fetchArticles = query => {
+    this.setState({ isLoading: true });
+
+    getArticlesByQuery(query)
+      .then(articles => this.setState({ articles: articles, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
   };
 
-  handleDeleteNote = id => {
-    this.setState(prevState => ({
-      notes: prevState.notes.filter(note => note.id !== id)
-    }));
-  };
-
-  handleFilterChange = e => {
+  handleCategoryChange = evt => {
     this.setState({
-      filter: e.target.value
+      category: evt.target.value
     });
   };
 
   render() {
-    const { notes, filter } = this.state;
-
-    const filteredNotes = filterNotes(filter, notes);
+    const { articles, isLoading, error, category } = this.state;
 
     return (
       <div>
-        <h1>Forms in React</h1>
-        <NoteEditor onSubmit={this.handleAddNote} />
-        <NoteFilter filter={filter} onFilterChange={this.handleFilterChange} />
-        <NoteList notes={filteredNotes} onDeleteNote={this.handleDeleteNote} />
+        <h1 style={styles.header}>Remote data in React</h1>
+
+        <CategorySelector
+          options={categorySelectorOptions}
+          category={category}
+          onChange={this.handleCategoryChange}
+        />
+        {error && <ErrorNotification />}
+        {isLoading ? <Spinner /> : <ArticleList articles={articles} />}
       </div>
     );
   }
