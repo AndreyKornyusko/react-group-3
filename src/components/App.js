@@ -36,7 +36,7 @@ export default class App extends Component {
     this.setState({ isLoading: true });
 
     getArticlesByQuery(query)
-      .then(articles => this.setState({ articles: articles, isLoading: false }))
+      .then(articles => this.setState({ articles, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   };
 
@@ -55,7 +55,7 @@ export default class App extends Component {
 
         <CategorySelector
           options={categorySelectorOptions}
-          category={category}
+          value={category}
           onChange={this.handleCategoryChange}
         />
         {error && <ErrorNotification />}
