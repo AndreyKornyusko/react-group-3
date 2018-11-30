@@ -1,66 +1,46 @@
 import React, { Component } from 'react';
-import ArticleList from './ArticleList';
-import CategorySelector from './CategorySelector';
-import ErrorNotification from './ErrorNotification';
-import Spinner from './Spinner';
-import { getArticlesByQuery } from '../services/api';
+import { css } from 'emotion';
+import { compose } from 'recompose';
+import TestComponent from './TestComponent';
+import withLog from '../enhancers/withLog';
+import withToggle from '../enhancers/withToggle';
+import withStorage from '../enhancers/withStorage';
+import Togglable from './Togglable';
+import FetchData from './FetchData';
 
-const styles = {
-  header: { textAlign: 'center' }
-};
+const header = css`
+  text-align: center;
+`;
 
-const categorySelectorOptions = ['html', 'css', 'javascript', 'react'];
-
-export default class App extends Component {
-  state = {
-    articles: [],
-    isLoading: false,
-    error: null,
-    category: categorySelectorOptions[0]
-  };
-
-  componentDidMount() {
-    this.fetchArticles(this.state.category);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevCategory = prevState.category;
-    const nextCategory = this.state.category;
-
-    if (prevCategory !== nextCategory) {
-      this.fetchArticles(nextCategory);
-    }
-  }
-
-  fetchArticles = query => {
-    this.setState({ isLoading: true });
-
-    getArticlesByQuery(query)
-      .then(articles => this.setState({ articles, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
-  };
-
-  handleCategoryChange = evt => {
-    this.setState({
-      category: evt.target.value
-    });
-  };
-
+class App extends Component {
   render() {
-    const { articles, isLoading, error, category } = this.state;
-
     return (
       <div>
-        <h1 style={styles.header}>Remote data in React</h1>
+        <h1 className={header}>React Patterns</h1>
 
-        <CategorySelector
-          options={categorySelectorOptions}
-          value={category}
-          onChange={this.handleCategoryChange}
-        />
-        {error && <ErrorNotification />}
-        {isLoading ? <Spinner /> : <ArticleList articles={articles} />}
+        <Togglable>
+          {({ on, toggle }) => (
+            <div>
+              <button onClick={toggle}>Toggle</button>
+              {on && <TestComponent title="Title" text="Text" />}
+            </div>
+          )}
+        </Togglable>
+
+        <FetchData url="https://jsonplaceholder.typicode.com/users">
+          {({ results, loading, error }) => (
+            <div>
+              {loading && <h1>LOADING!</h1>}
+              {results.length > 0 && JSON.stringify(results, null, 2)}
+            </div>
+          )}
+        </FetchData>
       </div>
     );
   }
 }
+
+export default compose(
+  withLog,
+  withStorage
+)(App);
