@@ -23,9 +23,7 @@ export default class ArticlesPage extends Component {
       });
     }
 
-    api
-      .fetchArticlesByCategory(category)
-      .then(articles => this.setState({ articles }));
+    this.fetchArticles(category);
   }
 
   componentDidUpdate(prevProps) {
@@ -37,10 +35,14 @@ export default class ArticlesPage extends Component {
 
     if (prevCategory === nextCategory) return;
 
-    api
-      .fetchArticlesByCategory(nextCategory)
-      .then(articles => this.setState({ articles }));
+    this.fetchArticles(nextCategory);
   }
+
+  fetchArticles = category => {
+    api
+      .fetchArticlesByCategory(category)
+      .then(articles => this.setState({ articles }));
+  };
 
   handleCategoryChange = category => {
     this.props.history.push({
