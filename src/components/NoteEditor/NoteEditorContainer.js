@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import NoteEditor from './NoteEditor';
 
-import { notesActions } from '../../modules/notes';
+import { notesOperations } from '../../modules/notes';
 
-const mapDispatchToProps = { addNote: notesActions.addNote };
+const mapDispatchToProps = { addNote: notesOperations.addNote };
 
 export default connect(
   null,
