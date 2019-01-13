@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import { actionTypes } from './actions';
+import { actionTypes } from '../actions';
 
-function items(state = [], { type, payload }) {
+function ids(state = [], { type, payload }) {
     switch (type) {
-        case actionTypes.FETCH_DATA:
-            return payload.users;
+        case actionTypes.FETCH_POSTS:
+            return payload.ids.authors;
 
         default:
             return state;
@@ -13,7 +13,7 @@ function items(state = [], { type, payload }) {
 
 function selectedId(state = null, { type, payload }) {
     switch (type) {
-        case actionTypes.SELECT_USER:
+        case actionTypes.SELECT_AUTHOR:
             return payload;
 
         default:
@@ -22,6 +22,6 @@ function selectedId(state = null, { type, payload }) {
 }
 
 export default combineReducers({
-    items,
+    ids,
     selectedId,
 });

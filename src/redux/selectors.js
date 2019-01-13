@@ -1,46 +1,48 @@
 import { createSelector } from 'reselect';
 
-export const getSelectedUserId = state => state.users.selectedId;
+const getAuthorIds = state => state.authors.ids;
 
-const getAllUsers = state => state.users.items;
+export const getSelectedAuthorId = state => state.authors.selectedId;
 
-export const getUserIds = createSelector(
-    [getAllUsers],
-    users => users.map(({ id }) => id),
+const getAurhorEntities = state => state.entities.authors;
+
+export const getAllAuthors = createSelector(
+    [getAuthorIds, getAurhorEntities],
+    (ids, entities) => ids.map(id => entities[id]),
 );
 
-// export const getUserIds = state => {
-//     const allUsers = getAllUsers(state);
-//     return allUsers.map(({ id }) => id);
+// export const getAllAuthors = state => {
+//     const ids = getAuthorIds(state);
+//     const entities = getAurhorEntities(state);
+
+//     return ids.map(id => entities[id]);
 // };
 
-const getAllPosts = state => state.posts;
+const getPostIds = state => state.posts;
+const getPostEntities = state => state.entities.posts;
 
-export const getPostsWithSelectedAuthor = createSelector(
-    [getAllPosts, getSelectedUserId],
-    (posts, selectedId) => posts.filter(post => post.userId === selectedId),
-);
+export const getPostsWithAuthor = state => {
+    const authorId = getSelectedAuthorId(state);
+    const postIds = getPostIds(state);
+    const entities = getPostEntities(state);
 
-// export const getPostsWithSelectedAuthor = state => {
-//     const allPosts = getAllPosts(state);
-//     const selectedId = getSelectedUserId(state);
+    // const posts = [];
 
-//     return allPosts.filter(post => post.userId === selectedId);
-// };
+    // postIds.forEach(postId => {
+    //     const post = entities[postId];
 
-export const makeGetPostsWithAuthor = () =>
-    createSelector(
-        [getAllPosts, (state, ownProps) => ownProps.id],
-        (posts, id) => posts.filter(post => post.userId === id),
-    );
+    // if (post.author === authorId) {
+    //     posts.push(post);
+    // }
+    // });
 
-// export const getPostsWithAuthor = createSelector(
-//     [getAllPosts, (state, ownProps) => ownProps.id],
-//     (posts, id) => posts.filter(post => post.userId === id),
-// );
+    return postIds.reduce((acc, postId) => {
+        const post = entities[postId];
 
-// export const getPostsWithAuthor = (state, ownProps) => {
-//     const allPosts = getAllPosts(state);
+        if (post.author === authorId) {
+            acc.push(post);
+        }
 
-//     return allPosts.filter(post => post.userId === ownProps.id);
-// };
+        return acc;
+    }, []);
+};

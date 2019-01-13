@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "normalizr": "^3.3.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
@@ -26,6 +27,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "faker": "^4.1.0",
     "redux-devtools-extension": "^2.13.7"
   }
 }
