@@ -1,34 +1,34 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import Products from '../Products/ProductsContainer';
+import Cart from '../Cart/CartConatiner';
+import CartIcon from '../CartIcon/CartIconContainer';
 
-import PostList from '../PostList/PostListContainer';
-import AuthorList from '../AuthorList/AuthorListContainer';
-import * as actions from '../../redux/actions';
 import s from './App.module.css';
 
-import posts from '../../posts.json';
+const App = () => (
+    <main className={s.container}>
+        <header
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}
+        >
+            <ul>
+                <li>
+                    <Link to="/">Products</Link>
+                </li>
+            </ul>
+            <CartIcon />
+        </header>
 
-class App extends Component {
-    componentDidMount() {
-        this.props.fetchPosts(posts);
-    }
+        <Switch>
+            <Route exact path="/" component={Products} />
+            <Route path="/cart" component={Cart} />
+            <Redirect to="/" />
+        </Switch>
+    </main>
+);
 
-    render() {
-        return (
-            <main className={s.container}>
-                <section className={s.sticky}>
-                    <AuthorList />
-                </section>
-
-                <section className={s.section}>
-                    <PostList />
-                </section>
-            </main>
-        );
-    }
-}
-
-export default connect(
-    null,
-    { fetchPosts: actions.fetchPosts },
-)(App);
+export default App;

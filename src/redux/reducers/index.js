@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import entityReducer from './entityReducer';
-import postReducer from './postReducer';
-import authorReducer from './authorReducer';
+import productsReducer from './productsReducer';
+import cartReducer from './cartReducer';
 
 export default combineReducers({
-    posts: postReducer,
-    authors: authorReducer,
+    products: productsReducer,
+    cart: cartReducer,
     entities: entityReducer,
 });

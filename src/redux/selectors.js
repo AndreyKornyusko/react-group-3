@@ -1,48 +1,30 @@
 import { createSelector } from 'reselect';
 
-const getAuthorIds = state => state.authors.ids;
+// Products
+const getProductIds = state => state.products;
 
-export const getSelectedAuthorId = state => state.authors.selectedId;
+const getProductsEntities = state => state.entities.products;
 
-const getAurhorEntities = state => state.entities.authors;
-
-export const getAllAuthors = createSelector(
-    [getAuthorIds, getAurhorEntities],
+export const getProducts = createSelector(
+    [getProductIds, getProductsEntities],
     (ids, entities) => ids.map(id => entities[id]),
 );
 
-// export const getAllAuthors = state => {
-//     const ids = getAuthorIds(state);
-//     const entities = getAurhorEntities(state);
+// Cart
 
-//     return ids.map(id => entities[id]);
-// };
+const getCartProductIds = state => state.cart.ids;
+const getCartProductAmounts = state => state.cart.amount;
 
-const getPostIds = state => state.posts;
-const getPostEntities = state => state.entities.posts;
+export const getCartProductsAmount = createSelector(
+    getCartProductIds,
+    ids => ids.length,
+);
 
-export const getPostsWithAuthor = state => {
-    const authorId = getSelectedAuthorId(state);
-    const postIds = getPostIds(state);
-    const entities = getPostEntities(state);
-
-    // const posts = [];
-
-    // postIds.forEach(postId => {
-    //     const post = entities[postId];
-
-    // if (post.author === authorId) {
-    //     posts.push(post);
-    // }
-    // });
-
-    return postIds.reduce((acc, postId) => {
-        const post = entities[postId];
-
-        if (post.author === authorId) {
-            acc.push(post);
-        }
-
-        return acc;
-    }, []);
-};
+export const getCartProducts = createSelector(
+    [getCartProductIds, getCartProductAmounts, getProductsEntities],
+    (ids, amounts, entities) =>
+        ids.map(id => ({
+            ...entities[id],
+            amount: amounts[id],
+        })),
+);
