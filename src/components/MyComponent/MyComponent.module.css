@@ -1,0 +1,23 @@
+.box {
+    width: 400px;
+    height: 400px;
+    color: #fff;
+    background-color: #009688;
+    transition: opacity 500ms ease-in-out;
+}
+
+.boxEnter {
+    opacity: 0.01;
+}
+
+.boxEnterActive {
+    opacity: 1;
+}
+
+.boxExit {
+    opacity: 1;
+}
+
+.boxExitActive {
+    opacity: 0.01;
+}
