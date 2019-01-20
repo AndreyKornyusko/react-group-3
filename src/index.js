@@ -3,4 +3,8 @@ import { render } from 'react-dom';
 import App from './components/App/App';
 import './index.css';
 
-render(<App />, document.getElementById('root'));
+const root: ?Element = document.getElementById('root');
+
+if (root) {
+    render(<App />, root);
+}

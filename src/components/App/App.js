@@ -1,10 +1,12 @@
 import React from 'react';
-import MyComponent from '../MyComponent/MyComponent';
+import Counter from '../Counter/Counter';
+import Form from '../Form/Form';
 import s from './App.module.css';
 
 const App = () => (
     <main className={s.container}>
-        <MyComponent />
+        <Counter initialValue={0} />
+        <Form onSubmit={user => {}} />
     </main>
 );
 
