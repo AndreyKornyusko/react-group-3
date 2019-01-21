@@ -1,3 +1,0 @@
-- [flow.org](https://flow.org/)
-- [Why use static types in JavaScript?](https://medium.freecodecamp.org/why-use-static-types-in-javascript-part-1-8382da1e0adb)
-- [How to setup Flow with create-react-app and Visual Studio Code](https://stephenmann.io/post/how-to-setup-flow-with-create-react-app-and-visual-studio-code/)
