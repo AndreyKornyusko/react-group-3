@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../common/Button/Button';
 import classes from './UserProfile.module.css';
 
-const UserProfile = ({ login = 'User name' }) => (
+const UserProfile = ({ user: { name }, onSignOut = () => null }) => (
   <div className={classes.container}>
     <img
       className={classes.image}
@@ -11,9 +11,9 @@ const UserProfile = ({ login = 'User name' }) => (
       height="40"
       alt=""
     />
-    <span className={classes.login}>{login}</span>
+    <span className={classes.name}>{name}</span>
 
-    <Button label="Sign out" />
+    <Button label="Sign out" onClick={onSignOut} />
   </div>
 );
 

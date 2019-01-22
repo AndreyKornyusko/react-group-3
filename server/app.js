@@ -1,7 +1,9 @@
 require('dotenv').config();
 
 const express = require('express');
+const { Router } = require('express');
 const corsMiddlware = require('cors');
+const expressJwt = require('express-jwt');
 const userDb = require('./utils/db');
 const token = require('./utils/token');
 
@@ -10,17 +12,23 @@ const app = express();
 app.use(express.json());
 app.use(corsMiddlware());
 
-app.post('/auth/signup', (req, res) => {
-  const { login, email, password } = req.body;
+// Routing
+const router = Router();
+
+const requireAuth = expressJwt({
+  secret: process.env.JWT_SECRET,
+  userProperty: 'user'
+});
+
+router.post('/signup', (req, res) => {
+  const { name, email, password } = req.body;
 
   userDb
-    .add({ login, email, password })
-    .then(({ id, login, email }) => {
+    .add({ name, email, password })
+    .then(({ id, name, email }) => {
       res.status(201).json({
-        id,
-        login,
-        email,
-        token: token.generate(req)
+        user: { id, name, email },
+        token: token.generate(id)
       });
     })
     .catch(error => {
@@ -30,17 +38,15 @@ app.post('/auth/signup', (req, res) => {
     });
 });
 
-app.post('/auth/signin', (req, res) => {
+router.post('/signin', (req, res) => {
   const { email, password } = req.body;
 
   userDb
     .find(email, password)
-    .then(({ id, login, email }) => {
+    .then(({ id, name, email }) => {
       res.status(200).json({
-        id,
-        login,
-        email,
-        token: token.generate(req)
+        user: { id, name, email },
+        token: token.generate(id)
       });
     })
     .catch(error => {
@@ -50,7 +56,7 @@ app.post('/auth/signin', (req, res) => {
     });
 });
 
-app.post('/auth/logout', (req, res) => {
+router.post('/signout', (req, res) => {
   const t = req.headers.authorization;
   const decoded = token.verify(t);
 
@@ -66,6 +72,23 @@ app.post('/auth/logout', (req, res) => {
     });
   }
 });
+
+router.get('/current', requireAuth, (req, res) => {
+  const { id } = req.user;
+
+  userDb
+    .getById(id)
+    .then(user => {
+      res.status(200).json({ user });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: error
+      });
+    });
+});
+
+app.use('/auth', router);
 
 app.listen(4040, () => {
   console.log('Server is listening on port 4040');

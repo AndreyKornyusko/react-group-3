@@ -1,16 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { JWT_SECRET } = process.env;
 
-const generate = req => {
-  return jwt.sign(
-    {
-      auth: 'magic',
-      agent: req.headers['user-agent'],
-      exp: Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60
-    },
-    JWT_SECRET
-  );
+const generate = id => {
+  const timestamp = new Date().getTime();
+
+  return jwt.sign({ timestamp, id }, JWT_SECRET);
 };
 
 const verify = token => {

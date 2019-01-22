@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as operations from '../../redux/operations';
 import Form from '../common/Form/Form';
 import Input from '../common/Input/Input';
 import Label from '../common/Label/Label';
 import Button from '../common/Button/Button';
 
-const INITIAL_STATE = { login: '', email: '', password: '' };
+const INITIAL_STATE = { name: '', email: '', password: '' };
 
-export default class SignUpForm extends Component {
+class SignUpForm extends Component {
   state = { ...INITIAL_STATE };
 
   handleChange = ({ target: { name, value } }) => {
@@ -24,15 +26,15 @@ export default class SignUpForm extends Component {
   };
 
   render() {
-    const { login, email, password } = this.state;
+    const { name, email, password } = this.state;
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Label text="Login">
+        <Label text="Name">
           <Input
             type="text"
-            name="login"
-            value={login}
+            name="name"
+            value={name}
             onChange={this.handleChange}
           />
         </Label>
@@ -61,3 +63,12 @@ export default class SignUpForm extends Component {
     );
   }
 }
+
+const mapDispatch = {
+  onSubmit: operations.signUp
+};
+
+export default connect(
+  null,
+  mapDispatch
+)(SignUpForm);

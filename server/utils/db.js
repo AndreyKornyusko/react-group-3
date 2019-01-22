@@ -9,17 +9,19 @@ const find = (email, password) => {
     user => user.email === email && user.password === password
   );
 
+  console.log('user: ', user);
+
   return user ? Promise.resolve(user) : Promise.reject('User not found');
 };
 
-const add = ({ login, email, password }) => {
+const add = ({ name, email, password }) => {
   if (!isUnique(email)) {
     return Promise.reject('User with this email already exists');
   }
 
   const user = {
     id: shortid.generate(),
-    login,
+    name,
     email,
     password
   };
@@ -29,7 +31,14 @@ const add = ({ login, email, password }) => {
   return Promise.resolve(user);
 };
 
+const getById = id => {
+  const user = userDb.find(user => user.id === id);
+
+  return user ? Promise.resolve(user) : Promise.reject('User not found');
+};
+
 module.exports = {
   add,
-  find
+  find,
+  getById
 };
