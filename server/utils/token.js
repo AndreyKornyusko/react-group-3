@@ -9,6 +9,7 @@ const generate = id => {
 };
 
 const verify = token => {
+  token = token.split(' ')[1];
   let decoded = false;
 
   try {

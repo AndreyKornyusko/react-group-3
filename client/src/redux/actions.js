@@ -8,8 +8,20 @@ export const actionTypes = {
   SIGN_OUT_REQUEST: 'session/SIGN_OUT_REQUEST',
   SIGN_OUT_SUCCESS: 'session/SIGN_OUT_SUCCESS',
   SIGN_OUT_ERROR: 'session/SIGN_OUT_ERROR',
-  GET_CURRENT: 'session/GET_CURRENT'
+  REFRESH_CURRENT_USER_START: 'session/REFRESH_CURRENT_USER_START',
+  REFRESH_CURRENT_USER_SUCCESS: 'session/REFRESH_CURRENT_USER_SUCCESS'
 };
+
+export const refreshUserStart = () => ({
+  type: actionTypes.REFRESH_CURRENT_USER_START
+});
+
+export const refreshUserSuccess = user => ({
+  type: actionTypes.REFRESH_CURRENT_USER_SUCCESS,
+  payload: {
+    user
+  }
+});
 
 export const signUpRequest = () => ({
   type: actionTypes.SIGN_UP_REQUEST
